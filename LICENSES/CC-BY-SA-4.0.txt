@@ -1,0 +1,6 @@
+Creative Commons Attribution-ShareAlike 4.0 International Public License (CC-BY-SA-4.0)
+
+OpenWhisk 3S Documentation & Media — Copyright (c) 2026 GPE 2026/27 Group 1:
+Trần Thiên Nga, Lê Thị Vân Anh, Phạm Hoài Thương, Lê Văn Đông, Võ Sỹ Hùng, Ngô Hoàng Quân, Trần Việt Tùng.
+
+Full legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode

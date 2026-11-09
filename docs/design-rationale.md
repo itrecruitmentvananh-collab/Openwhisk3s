@@ -1,68 +1,113 @@
-# Design rationale (why we chose what we chose)
+# **Design Rationale**
 
-Components follow the team's `Action tracker.xlsx` (`BOM updated` + `BOM Criteria`). Numbers marked *estimate* are
-not yet test evidence.
+## **1\. Functional Architecture**
 
-## Function structure
-Supply power → control speed → generate rotation → transmit torque → hold/change attachment → act on milk/food.
-Supporting: recharge, protect user, secure attachment, resist splashes.
+The current product architecture follows the functional flow:
 
-## Motor selection
+**Supply power → control speed → generate rotation → transmit torque → hold/change attachment → act on milk/food**
 
-### Step 1 (M2): 030-size motor evaluated
-Candidate: **FF-030PK-12135** precious-metal-brush motor (datasheet, 3.0 V): no-load 10 500 rpm / 0.064 A;
-max efficiency 8 410 rpm, 0.411 mN·m, 0.231 A, 52 %; max power 0.53 W at 6 265 rpm, 0.946 mN·m;
-stall 1.89 mN·m, 0.833 A; Kt = 2.462 mN·m/A; regulation 5 675 rpm/mN·m.
+Supporting functions include battery charging, user control, secure attachment retention, splash protection, repairability and non-destructive disassembly.
 
-Load estimate (mixing power law P = Np·ρ·n³·D⁵, torque T = P/ω), solved against the motor line n = n0 − 5675·T:
+The latest ASSEM\_INNER drawing defines the internal architecture including the motor, battery, housing, attachment, coupling, bearing, USB-C interface, button, microcontroller and motor driver.
 
-| Head | Np (assumed range) | Loaded speed | Torque | Current @3 V | % of stall torque |
-|---|---|---|---|---|---|
-| Frother spring Ø22 mm | 0.01 – 0.10 | 9 340 – 5 890 rpm | 0.21 – 0.81 mN·m | 0.15 – 0.39 A | 11 – 43 % |
-| Whisk Ø35 mm | 0.01 – 0.10 | 5 850 – 2 440 rpm | 0.82 – 1.42 mN·m | 0.40 – 0.64 A | 43 – 75 % |
+## **2\. Main Design Decisions**
 
-Conclusion: foaming feasible, **whisking marginal** with the 030 motor (> 50 % of stall torque risks overheating).
-The decision rule was: if marginal → switch to a **130-size motor (same voltage class)**.
+| Area | Current Design | Rationale |
+| :---- | :---- | :---- |
+| **Motor** | 130-series brushed DC motor, 3.7 V | Compact, low cost and suitable for a handheld whisk/frother architecture |
+| **Target speed** | 9k / 11k / 13k rpm | Provides three operating levels for light mixing and milk frothing |
+| **Battery** | Lishen LR1865SK, 18650, 3.65 V, 2600 mAh | Rechargeable, replaceable and provides adequate discharge capability |
+| **Charging interface** | USB Type-C | Common, compact and convenient charging interface |
+| **Controller** | ESP32-C3 SuperMini | Provides button input, PWM speed logic and LED/status control in a compact programmable platform |
+| **Motor driver** | DRV8833 | Provides the power-driving stage between the controller and brushed DC motor |
+| **User control** | 12 mm waterproof momentary push button with LED | Enables simple one-button operation, visual indication and improved splash resistance |
+| **Attachment** | Stainless-steel WHISKER | Corrosion-resistant, durable and cleanable for intended food-contact use |
+| **Coupling** | ADAPTER\_ASSEM \+ RETAINER \+ spring | Enables secure torque transfer, tool-free attachment change and replaceable wear parts |
+| **Bearing** | SKF W 61700, 10 × 15 × 3 mm | Supports radial load, reduces friction and helps reduce attachment wobble |
+| **Housing** | OUTER\_SHELL \+ OUTER\_CAP, PETG prototype | Suitable for FDM/FabLab manufacturing, low cost and easy design iteration |
+| **Inner mount** | PETG INNER\_MOUNT | Provides accurate positioning and structural support for internal components |
+| **Fasteners** | CAD items 11, 12 and 14; 10 pcs total | Supports repeated, non-destructive assembly and disassembly |
+| **Splash protection** | RUBBER\_COVER \+ sealed button; additional seals if required | Reduces liquid ingress at critical openings without claiming full waterproofing |
+| **Internal wiring** | Direct-soldered wiring | Reduces connector count and simplifies the prototype electrical architecture |
+| **Charging/protection electronics** | Integrated into electronics PCB | Reduces separate modules and supports a compact electrical architecture |
 
-### Step 2 (M3): 130-series motor selected (tracker BOM #1)
-**DC brushed motor 130 series, 3.7 V** (listing: 3–6 V, 14 500 rpm, with mounting bracket; supplier picture: body 25 × 20 × 15 mm,
-shaft Ø2 mm × 7.5 mm), €0.63. A 130 motor is larger than a 030 and has more torque headroom for the whisk.
-**Still open (tracker J2, Action #5 Tùng):** datasheet values (no-load/loaded current, stall torque/current). As soon as they are known,
-repeat the table above with the 130 motor line. The bench test (current → torque) remains the evidence.
+## **3\. Control Architecture**
 
-## Speed control (tracker BOM #8, #9 + firmware)
-A 12 mm waterproof momentary button + DRV8833 H-bridge. The DRV8833 needs a PWM signal, so an ATtiny85 runs the
-[firmware](../firmware/README.md): 3 levels defined as average motor voltage (2.0 / 2.8 / 3.6 V, capped at the 3.7 V
-rating), soft start, low-battery cut-off, auto-off. No rpm is claimed until measured (M2 direction ≈ 9 000 / 11 000 / 13 000 rpm).
+The current control chain is:
 
-## Coupling
-ADAPTER_ASSEM: press bore on the motor shaft, journal running in a ball bearing (takes side load from the attachment
-instead of the motor bearings), 3 mm hex socket transmits torque positively. CLAMP + PUSH + SPRING give tool-free change
-and stop the head falling out. ADAPTER and CLAMP are cheap reprintable wear parts.
-**To update for M3 (Tùng):** bore Ø1.5 → **Ø2.0 mm** (130 motor shaft). Bearing: CAD uses **W 61700 (10 × 15 × 3)**, the BOM is priced
-for **625Z (5 × 16 × 5)**. Choose one and align the ADAPTER journal diameter with it.
+**Push button → ESP32-C3 → DRV8833 → 130-series DC motor**
 
-## Power (tracker BOM #2)
-**Lishen LR1865SK 18650**: 3.65 V nominal, 4.20 V charge, 2600 mAh (min. 2500), max 5.2 A, ~45 g, ≥ 500 cycles → ≈ 9.5 Wh.
-Runtime *estimate*: with 80 % usable energy and a 1–3 W motor load → ≈ 2.5–7.5 h of motor time, while frothing takes ≈ 30 s
-per use. Hùng confirms this with the measured motor current (Action #7).
-Charging: USB-C (BOM #3) + a protected Li-ion charger module (proposed — tracker J3/J4). Cell in a holder with spring
-contacts = replaceable without soldering.
+The intended operating sequence is:
 
-## Material & food contact
-Only the attachment heads touch food → stainless steel (bought replacement rods MHMF03/07, BOM #5; steel grade to confirm,
-tracker J5). Printed PETG parts (Creality Soleyin Basic PETG) stay above the liquid line; ADAPTER/RETAINER are in the splash
-zone and are sealed and cleanable. The housing doesn't need a food-contact rating (Action #10, Nga).
+**Low → Medium → High → Off**
 
-## Splash protection
-Openings: drive end (RETAINER + seal), USB-C (rubber plug, tracker #14), button (IP65 12 mm button, tracker #8),
-OUTER_CAP (O-ring). Target: no water in the electronics after a tap-rinse of the head (test T5, Action #9).
+The three target operating speeds are:
 
-## Rejected options
-| Option | Why rejected |
-|---|---|
-| Injection-moulded PP housing (still named in `BOM Criteria` #4) | not a FabLab process for the prototype → PETG FDM |
-| 030 motor (FF-030PK) | whisking marginal on paper → 130 series |
-| Buck converter Mini 560 (tracker #10) | needs ~7–20 V input, can't run from one 3.65 V cell (tracker J11) |
-| Glued/welded housing | blocks repair and material separation |
-| AAA primary batteries | single-use waste |
+* **Low:** 9,000 rpm  
+* **Medium:** 11,000 rpm  
+* **High:** 13,000 rpm
+
+These values are current design targets and will be confirmed during prototype testing.
+
+## **4\. Mechanical Architecture**
+
+The latest ASSEM\_INNER drawing defines:
+
+* Item 1 — INNER\_MOUNT  
+* Item 2 — MOTOR  
+* Items 3–4 — OUTER\_SHELL / OUTER\_CAP  
+* Item 5 — ADAPTER\_ASSEM  
+* Item 6 — WHISKER  
+* Item 7 — RETAINER  
+* Item 8 — BALL\_BEARING  
+* Item 9 — TYPE\_C  
+* Item 10 — BUTTON  
+* Items 11, 12, 14 — FASTENERS  
+* Item 13 — RUBBER\_COVER  
+* Item 15 — MICROCONTROLLER  
+* Item 16 — MOTOR\_DRIVER  
+* Item 17 — 18650 battery \+ holder.
+
+This architecture supports modular assembly and allows major components to be replaced without permanent joining methods.
+
+## **5\. Material and Food-Contact Concept**
+
+The WHISKER is the primary food-contact component and is designed in stainless steel.
+
+The prototype housing, inner mount and selected coupling components use PETG because it is suitable for FDM manufacturing and rapid prototype iteration.
+
+Printed structural components are intended to remain outside direct food contact where practicable.
+
+## **6\. Repairability and Circularity**
+
+The design avoids permanent glue or welded housing joints where practical.
+
+Major serviceable components include:
+
+**battery, motor, attachment, coupling, bearing, button, controller and motor driver.**
+
+Mechanical fasteners support non-destructive disassembly, while printed wear parts can be reproduced individually rather than replacing the complete device.
+
+This supports the OpenWhisk 3S principles:
+
+**Simple · Sustainable · Serviceable**
+
+## **7\. Preliminary Load Assessment**
+
+A preliminary load-estimation approach was developed using the mixing power relationship:
+
+**P \= Np · ρ · n³ · D⁵**
+
+with torque derived from:
+
+**T \= P / ω**
+
+This approach is retained as an engineering method for evaluating the relative load of the frother and whisk heads.
+
+Previous numerical calculations were based on an earlier motor candidate and are therefore not treated as final evidence for the current 130-series motor.
+
+The final motor assessment will be based on the selected motor data and prototype measurements of loaded speed, current, temperature and functional performance.
+
+&nbsp;
+
+&nbsp;

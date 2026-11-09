@@ -1,9 +1,14 @@
-## PDF drawings
+# 2D Engineering Drawings (PDF — Synchronized with ASSEM_INNER 1046.pdf)
 
-`Export from cad/solidworks/drawings/*.SLDDRW (Save As → Adobe PDF). Existing drawings:`
+Exported from cad/solidworks/drawings/*.SLDDRW (Save As -> Adobe PDF).
 
-`ADAPTER.pdf · ADAPTER_ASSEM.pdf · ASSEM_INNER.pdf (exploded view + BOM balloon table recommended) · INNER_MOUNT.pdf · OUTER_CAP.pdf · OUTER_SHELL.pdf · WHISKER.pdf`
+## Included Drawings in This Folder:
+- **ASSEM_INNER.pdf** — **17-Item Exploded Assembly Drawing & BOM Balloon Table** (ASSEM_INNER 1046.pdf, matching om/BOM.xlsx sheet BOM 081126 = **€20.64** total)
+- **ADAPTER_ASSEM.pdf** — Tool quick-release coupling sub-assembly (CAD #5, BOM #7)
+- **ADAPTER.pdf** — Motor-to-hex shaft adapter (Ø2.0 mm motor bore, Ø10.0 mm SKF W 61700 bearing journal)
+- **INNER_MOUNT.pdf** — Internal motor, bearing & electronics support mount (CAD #1, BOM #13)
+- **OUTER_SHELL.pdf** — Main cylindrical PETG housing (CAD #3, BOM #5)
+- **OUTER_CAP.pdf** — Threaded battery compartment cap (CAD #4, BOM #5)
+- **WHISKER.pdf** — Stainless-steel food-contact attachment (CAD #6, BOM #6)
 
-`Missing drawings to add if time allows: RETAINER, CLAMP, PUSH, ADAPTER_CAP, BOARD. Each drawing should show: main dimensions, critical tolerances (fits), material, scale, title block with licence note "CERN-OHL-S-2.0".`
-
-&nbsp;
+All custom hardware drawings are released under **CERN-OHL-S-2.0**.

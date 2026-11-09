@@ -1,55 +1,29 @@
-# Bill of materials
+# Bill of Materials (M3 Design Freeze — `BOM 08.11.2026.xlsx`)
 
-**Source of truth:** the team's `Action tracker.xlsx` → sheet **`BOM updated`** (16 items). The tracker's
-`BOM Criteria` sheet gives the selection guidelines behind it.
-[`BOM.csv`](BOM.csv) (opens in any spreadsheet) and [`BOM.xlsx`](BOM.xlsx) copy those 16 rows with their CAD item numbers
-(`ASSEM_INNER` exploded view). They add a classification column for the course rules.
+**Source of truth:** [`BOM.xlsx`](BOM.xlsx) (sheet **`BOM 081126`**) and [`BOM.csv`](BOM.csv), synchronized 1-to-1 with the 17-item exploded assembly drawing [`drawings/pdf/ASSEM_INNER.pdf`](../drawings/pdf/ASSEM_INNER.pdf) (`ASSEM_INNER 1046.pdf`).
 
-## Cost (Action #3 — owner Nga, status open)
+## 1. Prototype Cost Summary (Action #3 — Completed)
+* **Total Prototype Cost:** **€20.64** (all items priced; **0 `TBD` items remaining**).
+* **Course Budget Limit:** **≤ €200.00** (**PASS** — prototype uses only **10.3%** of the maximum budget).
+* **FabLab 3D Printing Cost:** Filament is costed at **€6.43/kg** (`Creality Soleyin Basic PETG`, ~245 g total across `OUTER_SHELL`, `OUTER_CAP`, `ADAPTER_ASSEM`, `RETAINER`, `INNER_MOUNT` = **€1.92** total). Machine time and printing labor are €0.00.
 
-| | EUR |
-|---|---|
-| Sum of the 12 priced items in `BOM updated` | **13.82** |
-| Items without a price yet (TBD) | #8 push button · #10 Mini 560 step-down · #14 seal / USB-C cover · #16 packaging (digital docs = 0.00) |
-| Budget limit | 200.00 |
+## 2. Complete 17-CAD-Item Bill of Materials (`BOM 081126`)
 
-Printing machine time and labour are provided free of charge (tracker remark). Filament is costed at €6.43/kg
-(Creality Soleyin Basic PETG, EuroSupplies) plus about 10 % allowance. Prices are online listings (Shopee, Desertcart, local
-electronics shops), Oct–Nov 2026. They will be replaced by receipts after purchase.
-
-## Classification (Action #1 and #2 — owner Tùng, status **Y**)
-
-| Class | Items (BOM No.) | Counts toward "≤ 2 purchased parts"? |
-|---|---|---|
-| Purchased functional part | #1 motor 130 series 3.7 V · #2 Lishen LR1865SK 18650 | **Yes → 2** |
-| Custom (FabLab 3D print, PETG) | #4 OUTER_SHELL + OUTER_CAP · #6 ADAPTER_ASSEM + RETAINER · #12 INNER_MOUNT | No |
-| Bought attachment | #5 WHISKER (replacement stainless rods MHMF03/07) | **Open:** tracker J6 asks "purchased or custom-made?" To confirm with the lecturers |
-| Standard component | #3 USB-C · #8 button · #9 DRV8833 · #10 step-down · #13 bearing · #14 seal | To confirm with the lecturers (same rule as the module question) |
-| Standard consumable / fixture | #7 screws · #11 wire + JST | No |
-
-**Part count with the CAD item list (3–8 rule):** counted parts = INNER_MOUNT (1), motor (2), battery (3), OUTER_SHELL (4),
-OUTER_CAP (5), ADAPTER_ASSEM (6), WHISKER (7), RETAINER (8) → **8 parts**. Standard components (9 bearing, 10 driver, 11
-step-down, 12 USB-C, 13 button) and fasteners/wires count as standard components/fixtures. *(Tùng's result for Action #1 is the official count. Update this line if it differs.)*
-
-## Open points carried from the tracker (column J)
-
-| BOM # | Open point | Owner |
-|---|---|---|
-| 1 | Shaft diameter/length, no-load/loaded current, torque. The supplier picture shows a **Ø2 mm × 7.5 mm shaft, 25 × 20 × 15 mm body**. The current CAD ADAPTER has a Ø1.5 mm bore (from the 030 motor) and must be updated | Tùng |
-| 2 | Bare or protected cell? Holder dimensions? Separate BMS? | Hùng |
-| 3 | Is "TYPE_C" only the connector or part of a charging circuit? **A Li-ion charger is required.** See below | Tùng / Hùng |
-| 5 | Whisk diameter, length, shaft diameter, steel grade. Purchased or custom? | Hùng (quotation) |
-| 9 | Motor stall current vs DRV8833 rating (~1.5 A) | Tùng (T1/T2) |
-| 10 | **Mini 560 (5 V) needs ~7–20 V input. It can't run from one 3.65 V cell** → architecture rechecked in [`electronics/wiring.md`](../electronics/wiring.md) | Tùng |
-| 13 | Price picked for **625Z (5 mm bore)**, but CAD uses **W 61700 (10 mm bore)**. Tech team to choose and align CAD/BOM | Tùng |
-| 14 | Seal location/geometry/material. Rubber plug for the USB-C port | Tùng |
-
-## Proposed additions (not yet in the tracker, no price) — for team decision
-
-These follow from the open points above. They are **not** included in the €13.82.
-
-| Item | Why it's needed | Decide / quote |
-|---|---|---|
-| Microcontroller ATtiny85 (DIP-8) + IC socket + 100 nF capacitor | The DRV8833 needs a PWM signal, and the momentary button can't make 3 speeds by itself. See [`firmware/README.md`](../firmware/README.md) | Nga (price), Tùng (part count) |
-| Protected USB-C Li-ion charger module (4.2 V CC/CV, DW01-type protection) | Safe charging + over-discharge/short protection. Answers tracker J3/J4. Could replace #10 Mini 560 | Hùng / Nga |
-| 18650 holder with spring contacts | Replaceable cell without soldering (tracker J3, docs) | Tùng |
+| No. | CAD Item # (`ASSEM_INNER`) | Component / Material | Qty | Part Classification | Proposed Model / Specification | Cost (EUR) | Remark |
+| :-: | :-: | :--- | :-: | :--- | :--- | :-: | :--- |
+| **1** | **2** | **Motor** | 1 | Purchased | **DC Brushed Motor – 130 Series, 3.7 V** (3–6V, 14,500 RPM, w/ bracket) | **0.63** | Target operating speeds: 9k / 11k / 13k rpm |
+| **2** | **17** | **Battery** | 1 | Purchased | **Lishen LR1865SK, 18650 Li-ion, 3.65 V, 2600 mAh**, max discharge 5.2 A | **1.22** | Replaceable cell in holder (`CAD #17`); not soldered |
+| **3** | **9** | **Charging Interface** | 1 | Purchased | **USB Type-C interface (`TYPE_C.step`)** | **0.06** | Charging/protection integrated into electronics PCB |
+| **5** | **3, 4** | **Main Housing** | 1 set (2 parts) | Custom fabricated | **`OUTER_SHELL` + `OUTER_CAP` – PETG prototype** (`Creality Basic PETG`) | **1.42** | ~200 g PETG + 10% contingency; machine/labor = €0 |
+| **6** | **6** | **Food-Contact Attachment** | 1 | Custom fabricated | **`WHISKER` – stainless-steel candidate** / commercial reference | **11.00** | Refer quotation of supplier; only food-contact part |
+| **7** | **5, 7** | **Tool Connector / Coupling incl. spring** | 1 | Custom fabricated + standard spring | **`ADAPTER_ASSEM` + `RETAINER` + spring** (`Creality Basic PETG`) | **0.30** | ~15–20 g PETG + ~10% allowance; machine/labor = €0 |
+| **8** | **11, 12, 14** | **Fasteners** | 10 | Standard hardware | **ASME B18.3.1M / B18.6.7M, M2 × 0.4 × 3 mm** Socket/Flat Head Cap Screws | **0.15** | `CAD #11` (2 pcs), `CAD #12` (6 pcs), `CAD #14` (2 pcs); A2 SS |
+| **9** | **10** | **Switch / User Control** | 1 | Purchased | **12 mm waterproof momentary push button with LED** (`BUTTON`) | **1.02** | Intended Low → Medium → High → Off via firmware |
+| **10** | **16** | **Speed Control / Motor Driver** | 1 | Purchased | **`DRV8833` motor driver module** (`MOTOR_DRIVER.stp`, 3–10 V, 1.5 A) | **0.52** | Compact DC motor H-bridge PWM driver |
+| **11** | **15** | **Controller / Speed Logic** | 1 | Purchased / prototype controller | **`ESP32-C3 SuperMini`** (`MICROCONTROLLER`) | **2.20** | Compact programmable MCU (3-speed PWM + LED control) |
+| **13** | **1** | **Inner Mount / Internal Support** | 1 | Custom fabricated | **`INNER_MOUNT` – PETG** (`Creality Basic PETG`) | **0.20** | ~25–30 g PETG @ €6.43/kg + 10% allowance |
+| **14** | **8** | **Ball Bearing / Rotational Support** | 1 | Purchased | **`SKF W 61700` – 10 × 15 × 3 mm** (`BALL_BEARING`) | **0.42** | Ø10 mm bore, Ø15 mm OD, 3 mm width |
+| **15** | **13** | **Seals / Protective Parts** | 1 | Standard hardware / sealing parts | **USB-C silicone cover** (`RUBBER_COVER`) | **1.50** | Splash protection at liquid-ingress points |
+| **16** | **—** | **Prototype Material** | 1 | Consumable material | **PETG filament** (`Creality Soleyin Basic PETG`) | **0.00** | Already included in printed-part costs above |
+| **17** | **—** | **Packaging / Documentation** | 1 set | Documentation / consumable | **Digital OSH documentation / GitHub repository** | **0.00** | Public repo under `CERN-OHL-S-2.0` / `CC-BY-SA-4.0` / `MIT` |
+| **TOTAL** | **1–17** | **Complete OpenWhisk 3S Prototype** | **17 CAD items** | **All items priced** | **Complies with ≤ €200 Course Budget** | **20.64** | **PASS (10.3% of €200 limit)** |

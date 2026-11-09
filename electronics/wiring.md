@@ -1,48 +1,33 @@
-# Electronics — block diagram & wiring (v0.3, aligned with Action tracker `BOM updated`)
+# Electronics — Block Diagram & Wiring (`BOM 08.11.2026` & `ASSEM_INNER 1046`)
 
 ```mermaid
 flowchart LR
-  USB["USB-C 5 V<br/>(BOM #3 TYPE_C)"] --> CHG["Li-ion charger + protection<br/>(proposed, see bom/README)"]
-  CHG <--> CELL["Lishen LR1865SK 18650<br/>3.65 V nom., 4.20 V full<br/>(BOM #2)"]
-  CHG -- "OUT+ / OUT-" --> MCU["ATtiny85 + firmware<br/>(proposed)"]
-  CHG -- "VM" --> DRV["DRV8833 module<br/>(BOM #9)"]
-  BTN["12 mm push button<br/>(BOM #8)"] --> MCU
-  MCU -- "PWM 31 kHz / EEP" --> DRV
-  DRV -- "AOUT1 / AOUT2" --> M(("130 motor 3.7 V<br/>(BOM #1)"))
+  USB["USB-C Port<br/>(CAD #9 / BOM #3)"] --> CHG["Integrated Charging / Protection<br/>& Lishen 18650 Cell 3.65V<br/>(CAD #17 / BOM #2)"]
+  CHG -- "3.0–4.2 V" --> MCU["ESP32-C3 SuperMini<br/>(CAD #15 / BOM #11)"]
+  CHG -- "VM (3.0–4.2 V)" --> DRV["DRV8833 Motor Driver<br/>(CAD #16 / BOM #10)"]
+  BTN["12 mm Waterproof LED Button<br/>(CAD #10 / BOM #9)"] <-->|"Switch GPIO3 / LED GPIO8"| MCU
+  MCU -- "PWM GPIO4 & Enable GPIO6" --> DRV
+  DRV -- "AOUT1 / AOUT2" --> M(("130 DC Motor 3.7V<br/>(CAD #2 / BOM #1)"))
 ```
 
-## Wiring table
+## 1. Component Mapping (`ASSEM_INNER 1046.pdf` $\leftrightarrow$ `BOM 08.11.2026.xlsx`)
 
-| From | To | Wire (BOM #11) | Note |
-|---|---|---|---|
-| USB-C VBUS / GND | Charger IN+ / IN− | red / black 24 AWG | USB-C needs 5.1 kΩ CC resistors (usually already on charger modules) |
-| Cell holder + / − | Charger B+ / B− | red / black 24 AWG | spring contacts, cell swappable, no soldering on the cell |
-| Charger OUT+ | ATtiny85 pin 8 (VCC) **and** DRV8833 VM | red | 100 nF directly at ATtiny pin 8–4 |
-| Charger OUT− | ATtiny85 pin 4 (GND), DRV8833 GND, button leg 2 | black | common ground |
-| Button leg 1 | ATtiny85 pin 2 (PB3) | 24 AWG | internal pull-up, no resistor |
-| ATtiny85 pin 3 (PB4) | DRV8833 AIN1 | 24 AWG | PWM |
-| ATtiny85 pin 5 (PB0) | DRV8833 AIN2 | 24 AWG | held LOW |
-| ATtiny85 pin 7 (PB2) | DRV8833 EEP / STBY / nSLEEP | 24 AWG | leave open if the module has no such pin |
-| DRV8833 AOUT1 / AOUT2 | Motor terminals | red / black, JST at board | solder at motor only |
+| CAD Item # | Part Number in Drawing | BOM No. | Model / Specification | Cost (EUR) |
+| :-: | :--- | :-: | :--- | :-: |
+| **2** | `MOTOR` | **1** | **DC Brushed Motor – 130 Series, 3.7 V** (3–6V, 14,500 RPM no-load) | **0.63** |
+| **17** | `battery 18650+holder.stp` | **2** | **Lishen LR1865SK 18650 Li-ion, 3.65 V, 2600 mAh, 5.2 A** (in holder) | **1.22** |
+| **9** | `TYPE_C.step` | **3** | **USB Type-C PCB Connector** (`RUBBER_COVER` `CAD #13` seals port when closed) | **0.06** |
+| **10** | `BUTTON` | **9** | **12 mm Waterproof Momentary Push Button with LED** | **1.02** |
+| **15** | `MICROCONTROLLER` | **11** | **`ESP32-C3 SuperMini`** (reads button, drives LED, outputs 3-speed PWM) | **2.20** |
+| **16** | `MOTOR_DRIVER.stp` | **10** | **`DRV8833` Motor Driver Module** (`3–10 V`, `1.5 A`) | **0.52** |
 
-Pin details, flashing and behaviour: [`firmware/README.md`](../firmware/README.md).
+## 2. Wiring Connections
 
-## Voltage architecture (why there is no step-down converter)
-
-| Component | Needs | From one 18650 (3.0–4.2 V) |
-|---|---|---|
-| Motor 130 series, 3.7 V (BOM #1, listed 3–6 V) | ≤ 3.7 V average | ✔ firmware limits the average motor voltage to 3.7 V (`MOTOR_MAX_MV`) |
-| DRV8833 (BOM #9) | 2.7–10.8 V (listing: 3–10 V) | ✔ direct |
-| ATtiny85 @ 8 MHz | 2.7–5.5 V | ✔ direct |
-| **Mini 560 step-down 5 V (BOM #10)** | **~7–20 V input** | ✘ **not usable** (tracker J11). Proposed: remove it, or replace it with the protected USB-C charger module |
-
-So no voltage converter is needed between the cell and the electronics. The firmware compensates for the falling cell voltage
-(`duty = level_mV × 255 / cell_mV`), so the speed stays roughly constant until the cut-off at 3.2 V.
-
-## Open checks (tests/TEST_PLAN.md)
-
-- Motor stall/start current vs the DRV8833 rating (~1.5 A per channel; both channels can be paralleled if needed) — T1/T2, Tùng.
-- Is the Lishen cell bare or protected? Treat it as **bare** until confirmed, so hardware protection (DW01-type) is mandatory — Hùng.
-- Remove the power LED on the DRV8833/charger module if fitted, otherwise it drains the cell during sleep — T9.
-
-**Safety:** never short the cell holder; use the charger module with protection; insulate all joints with heat-shrink.
+| From | To | Signal / Wire | Note |
+| :--- | :--- | :--- | :--- |
+| `USB-C` (`CAD #9`) | Charging circuit $\rightarrow$ `18650 Holder` (`CAD #17`) | `5V VBUS` / `GND` | Protected 4.20 V Li-ion charging; cell is removable in holder |
+| `18650 Holder +` (`CAD #17`) | `ESP32-C3 SuperMini` (`CAD #15`) & `DRV8833 VM` (`CAD #16`) | `VBAT+` (`3.0–4.2 V`) | Direct single-cell supply (no step-down converter needed) |
+| `12mm Button Switch` (`CAD #10`) | `ESP32-C3 GPIO3` & `GND` | Momentary `NO` contact | Cycles `Low (9k) → Medium (11k) → High (13k) → Off` |
+| `ESP32-C3 GPIO8` | `12mm Button LED +` (`CAD #10`) | LED indicator | Illuminated while running; blinks on low battery |
+| `ESP32-C3 GPIO4 / GPIO5 / GPIO6` | `DRV8833 AIN1 / AIN2 / EEP` (`CAD #16`) | 3-speed PWM & Enable | Regulates average motor voltage (`2.5V / 3.1V / 3.65V`) |
+| `DRV8833 AOUT1 / AOUT2` (`CAD #16`) | `130 Series Motor` (`CAD #2`) | Motor power leads | Detachable internal connector for solderless repair |

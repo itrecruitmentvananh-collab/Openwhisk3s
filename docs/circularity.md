@@ -1,10 +1,11 @@
-# Circularity (10R)
+# Circularity (10R Framework — `ASSEM_INNER 1046.pdf` & `BOM 08.11.2026.xlsx`)
 
-| R-strategy | How OpenWhisk 3S applies it | Evidence |
+| R-Strategy | How OpenWhisk 3S Applies It in the M3 Design (`ASSEM_INNER 1046`) | Repository Evidence |
 | :---- | :---- | :---- |
-| R0 Refuse | no single-use batteries, no glue/welding, no soldered cell | design files |
-| R1 Rethink | one drive platform, several heads → fewer single-purpose gadgets | concept |
-| R4 Repair | screws \+ plugs, wear parts reprintable for cents, repair guide | disassembly test, disassembly doc&nbsp;&nbsp;&nbsp; |
-| R6 Remanufacture | standard 18650 cell (can be a tested second-life cell), standard heads | BOM |
-
-&nbsp;
+| **R0 Refuse** | Zero single-use primary batteries; zero glue or ultrasonic welding; 3D-printed PETG kept outside the direct food-contact zone | [`docs/design-rationale.md`](design-rationale.md) |
+| **R1 Rethink** | One compact 3-speed drive platform (`130 Motor` `CAD #2` + `ESP32-C3` `CAD #15` + `DRV8833` `CAD #16`) powers multiple interchangeable heads (`WHISKER` `CAD #6`) via a quick-release coupling (`ADAPTER_ASSEM` `CAD #5`) | [`README.md`](../README.md), [`cad/README.md`](../cad/README.md) |
+| **R2 Reduce** | Consolidates two single-purpose gadgets (milk frother + egg/sauce whisk) into a single €20.64 device using ~245 g of PETG filament (€1.92) | [`bom/BOM.csv`](../bom/BOM.csv), [`bom/README.md`](../bom/README.md) |
+| **R3 Reuse** | Off-the-shelf modular components (`Lishen 18650` cell `CAD #17`, `ESP32-C3 SuperMini` `CAD #15`, `DRV8833` `CAD #16`, `SKF W 61700` bearing `CAD #8`, `10× M2×3` screws `CAD #11, #12, #14`) can be harvested and reused intact | [`docs/disassembly-repair.md`](disassembly-repair.md) |
+| **R4 Repair** | 100% screw-fastened (`10× M2 × 0.4 × 3 mm` screws) + spring-contact 18650 holder (`CAD #17`) + reprintable PETG wear parts (`ADAPTER_ASSEM` `CAD #5`, `RETAINER` `CAD #7` cost €0.30 to reprint in any FabLab) | [`docs/assembly.md`](assembly.md), [`docs/disassembly-repair.md`](disassembly-repair.md) |
+| **R6 Remanufacture / R7 Repurpose** | Standard `18650` cell (`CAD #17`) can use tested second-life cells; open `ESP32-C3` firmware (`MIT`) and native SolidWorks/STEP CAD (`CERN-OHL-S-2.0`) allow full community upgrades during the GPE design swap | [`CONTRIBUTING.md`](../CONTRIBUTING.md), [`firmware/README.md`](../firmware/README.md) |
+| **R8 Recycle** | Tool-assisted separation into 5 clean end-of-life streams: mono-material `>PETG<` plastics (`#1, #3, #4, #5, #7`), stainless/bearing metals (`#6, #8, #11, #12, #14`), silicone seal (`#13`), WEEE electronics (`#2, #9, #10, #15, #16`), and Li-ion battery (`#17`) | [`docs/disassembly-repair.md`](disassembly-repair.md) |

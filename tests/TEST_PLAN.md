@@ -1,18 +1,27 @@
-# Test plan (M3 → M4 Physical Verification)
+# Test plan (M3 → M4)
 
-Synchronized with **`ASSEM_INNER 1046.pdf` (17 CAD items)** and **`BOM 08.11.2026.xlsx` (`BOM 081126`, €20.64 total)**:
-- **Drive & Support:** `130 Series 3.7 V DC Motor` (`CAD #2`, `BOM #1`) + `SKF W 61700` (`10 × 15 × 3 mm`, `CAD #8`, `BOM #14`) + `ADAPTER_ASSEM` (`CAD #5`, `BOM #7`).
-- **Controller, Driver & UI:** `ESP32-C3 SuperMini` (`CAD #15`, `BOM #11`) + `DRV8833` (`CAD #16`, `BOM #10`) + `12 mm Waterproof Momentary Push Button with LED` (`CAD #10`, `BOM #9`).
-- **Power & Splash Sealing:** `Lishen LR1865SK 18650 3.65 V 2600 mAh` (`CAD #17`, `BOM #2`) + `USB-C` (`CAD #9`, `BOM #3`) + `RUBBER_COVER` USB-C silicone seal (`CAD #13`, `BOM #15`).
+> **Status at M3 (10 Nov 2026): no physical prototype exists yet.**
+> This plan defines *how* the product will be verified. Physical tests are run in M4 once the first prototype is printed and assembled.
+> What can already be checked before the prototype (analysis, CAD inspection, software) is recorded in
+> [`records/M3_pre-prototype_verification.md`](records/M3_pre-prototype_verification.md).
 
-| ID | Test | Method | Pass criterion | Owner | Record |
-|---|---|---|---|---|---|
-| **T1** | **Motor under load — Frother (`CAD #2, #6`)** | 150 ml milk, 30 s at High speed (`Level 3`, ~3.65 V avg, target ~13,000 RPM); measure current (multimeter), speed (strobe/tacho app), motor temperature | Stable foam formed in ≤ 30 s, no stall, $T_{\text{motor}} < 60\text{ °C}$ | Tùng | `records/motor_frother_*.md` |
-| **T2** | **Motor under load — Whisk (`CAD #2, #6`)** | 2 eggs or 100 ml light cream, 2 min at Low/Medium speed (`Level 1/2`, target ~9,000 / 11,000 RPM) | Smooth mixing, no stall, no radial wobble at `SKF W 61700` bearing (`CAD #8`), $T_{\text{motor}} < 60\text{ °C}$ | Tùng | `records/motor_whisk_*.md` |
-| **T3** | **Coupling retention & tool-free swap (`CAD #5, #7, #8`)** | 20 attach/detach cycles of `WHISKER` (`CAD #6`); pull test; run 2 min at full speed (`13,000 RPM`) | No self-release, tool-free swap by hand $< 5\text{ s}$, no visible wear on `ADAPTER_ASSEM` | Tùng | `records/coupling_*.md` |
-| **T4** | **Battery runtime & low-battery cutoff (`CAD #17`)** | Full `Lishen LR1865SK 18650` cell (`2600 mAh`), frother load until firmware low-battery cutoff (`3.20 V`) | Total runtime $\ge 60\text{ min}$; `ESP32-C3` stops motor at $3.20\text{ V}$ and blinks button LED at `4 Hz` | Hùng | `records/runtime_*.md` |
-| **T5** | **Splash protection (`CAD #7, #10, #13`)** | Close `RUBBER_COVER` (`CAD #13`) over USB-C (`CAD #9`); rinse head & collar 10 s under tap, wipe body, open housing, inspect with dry tissue | Zero water ingress inside electronics/battery compartment (`INNER_MOUNT` `CAD #1`) | Tùng | `records/splash_*.md` |
-| **T6** | **Cleanability & food-contact boundary (`CAD #5, #6`)** | Use with milk/egg, detach stainless `WHISKER` (`CAD #6`), wash head, wipe PETG housing (`CAD #3, #4`), inspect coupling for trapped residue | No visible residue on `WHISKER` (`#6`) or `ADAPTER_ASSEM` (`#5`); PETG body stays above food zone | Tùng / Nga | `records/cleaning_*.md` |
-| **T7** | **Non-destructive disassembly & repair (`CAD #11, #12, #14`)** | Full teardown and reassembly using only M2 hex / PH1 driver (`10× M2 × 0.4 × 3 mm` screws, no glue), 3 repetitions | Zero broken parts, device operates normally after rebuild; teardown & rebuild time recorded | Hùng | `records/disassembly_*.md` |
-| **T8** | **USB-C charging & thermal safety (`CAD #9, #17`)** | Connect 5 V USB-C charger to `TYPE_C` (`CAD #9`), charge depleted `18650` cell (`CAD #17`) to full `4.20 V` | Charges cleanly, automatic cut-off at `4.20 V`, cell/PCB temperature $< 45\text{ °C}$ | Hùng | `records/charging_*.md` |
-| **T9** | **Firmware 3-speed state machine & LED UI (`CAD #10, #15, #16`)** | Run automated PC unit test (`firmware/test/test_speed_logic.cpp`) + bench test short press (`Low → Med → High → Off`), long press ($\ge 0.8\text{ s} \rightarrow \text{Off}$), soft-start ramp, and 3-min auto-off | All 19 unit tests PASS; button LED (`GPIO8`) steady ON when running, OFF when stopped, 4 Hz blink on low battery | Vân Anh / Tùng | `records/firmware_*.md` |
+Design basis: `ASSEM_INNER` drawing (17 CAD items) and `BOM 08.11.2026.xlsx` (sheet `BOM 081126`, €20.64).
+
+**Verification methods:** **A** = analysis / calculation · **C** = CAD inspection · **S** = software test on PC · **P** = physical test on prototype
+
+| ID | Test | Method (P = how it will be done on the prototype) | Pass criterion | Pre-prototype check (M3) | Physical test | Owner | Record |
+|---|---|---|---|---|---|---|---|
+| **T1** | Motor under load — frother (`CAD #2, #6`) | **A** + **P**: 150 ml milk, 30 s at High; measure current (multimeter), speed (tachometer/strobe app), motor temperature | Foam formed in ≤ 30 s, no stall, T_motor < 60 °C | A: load estimate (method only — numbers were made for an earlier motor) | Not yet tested | Tùng | `records/motor_frother_YYYYMMDD.md` |
+| **T2** | Motor under load — whisk (`CAD #2, #6, #8`) | **A** + **P**: 2 eggs or 100 ml light cream, 2 min at Low/Medium | No stall, no visible wobble, T_motor < 60 °C | A: same as T1 | Not yet tested | Tùng | `records/motor_whisk_YYYYMMDD.md` |
+| **T3** | Coupling retention & tool-free swap (`CAD #5, #7, #8`) | **C** + **P**: 20 attach/detach cycles; pull test; 2 min at full speed | No self-release, swap by hand < 5 s, no visible wear | C: bore / journal / bearing fit in SolidWorks | Not yet tested | Tùng | `records/coupling_YYYYMMDD.md` |
+| **T4** | Battery runtime & low-battery cut-off (`CAD #17`) | **A** + **P**: full cell, frother load until firmware cut-off | Runtime ≥ 60 min; motor stops at cut-off voltage | A: energy budget from cell datasheet | Not yet tested | Hùng | `records/runtime_YYYYMMDD.md` |
+| **T5** | Splash protection (`CAD #7, #10, #13`) | **C** + **P**: close `RUBBER_COVER`, rinse head 10 s under tap, open housing, check with dry tissue | No water inside electronics/battery zone | C: openings and seal positions in CAD | Not yet tested | Tùng | `records/splash_YYYYMMDD.md` |
+| **T6** | Cleanability & food-contact boundary (`CAD #5, #6`) | **C** + **P**: use with milk/egg, wash head, inspect coupling for residue | No visible residue on head / socket | C: only `WHISKER` below liquid line | Not yet tested | Tùng / Nga | `records/cleaning_YYYYMMDD.md` |
+| **T7** | Disassembly / reassembly (`CAD #11, #12, #14`) | **C** + **P**: full teardown and rebuild with screwdriver only, 3 repetitions, timed | No broken part, works after rebuild; time recorded | C: all joints screws / snap-fits, no glue | Not yet tested | Hùng | `records/disassembly_YYYYMMDD.md` |
+| **T8** | USB-C charging & thermal safety (`CAD #9, #17`) | **P**: 5 V USB-C, charge depleted cell to full | Charges, cuts off at full, no part > 45 °C | — (needs hardware) | Not yet tested | Hùng | `records/charging_YYYYMMDD.md` |
+| **T9** | Firmware speed logic & LED (`CAD #10, #15, #16`) | **S**: compile and run `firmware/test/test_speed_logic.cpp` on a PC · **P**: flash ESP32-C3 and check button sequence, LED, auto-off | S: all 19 checks print `ok`, 0 `FAIL` · P: Low → Medium → High → Off works on hardware | S: **not run yet** (no compiler on the team laptop) | Not yet tested | Vân Anh / Tùng | `records/firmware_YYYYMMDD.md` |
+
+## Rules for test records
+- One file per test run, named `records/<test>_YYYYMMDD.md`, using [`records/_TEMPLATE.md`](records/_TEMPLATE.md).
+- Write only values that were actually measured, with the date and the people who did the test. Add a photo of the set-up in `images/`.
+- A failed or partial result is still a valid record — write what was learned and which design change it triggered (add it to `CHANGELOG.md`).

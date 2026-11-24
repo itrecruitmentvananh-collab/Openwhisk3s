@@ -8,15 +8,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 ## 1. Important Clarification: Do You Need to "Apply" to CERN?
 **NO!** You do **not** submit an application form to CERN or pay any fee to use `CERN-OHL-S-2.0`.  
 Just like the `MIT` or `GPL` license for software, **`CERN-OHL-S-2.0` is a self-applied open-source hardware license**:
-- You legally apply it yourself simply by placing the official `CERN-OHL-S-2.0` license files ([`LICENSE`](../LICENSE) and [`LICENSE.txt`](../LICENSE.txt)) and attribution notice ([`NOTICE.md`](../NOTICE.md)) inside your public GitHub repository (`https://github.com/itrecruitmentvananh-collab/Openwhisk3s`) and complying with its 4 rules below.
+- You legally apply it yourself simply by placing the official `CERN-OHL-S-2.0` license file ([`LICENSE`](../LICENSE)) and attribution notice ([`NOTICE.md`](../NOTICE.md)) inside your public GitHub repository (`https://github.com/itrecruitmentvananh-collab/Openwhisk3s`) and complying with its 4 rules below.
 
 ---
 
 ## 2. How OpenWhisk 3S Satisfies All 4 Rules of `CERN-OHL-S-2.0`
 
 ### Rule 1: Official License Files & Attribution Notice in Repository Root
-1. [`LICENSE`](../LICENSE) and [`LICENSE.txt`](../LICENSE.txt) — Full, unmodified official text of `CERN-OHL-S-2.0` in the repository root.
-2. [`firmware/LICENSE`](../firmware/LICENSE) and [`firmware/LICENSE.txt`](../firmware/LICENSE.txt) — `MIT` License covering the `ESP32-C3 SuperMini` firmware.
+1. [`LICENSE`](../LICENSE) — Full, unmodified official text of `CERN-OHL-S-2.0` in the repository root.
+2. [`firmware/LICENSE`](../firmware/LICENSE) — `MIT` License covering the `ESP32-C3 SuperMini` firmware.
 3. [`NOTICE.md`](../NOTICE.md) — Credits all 7 members of GPE 2026/27 Group 1, states the 3-layer licensing (`CERN-OHL-S-2.0` for hardware, `CC-BY-SA-4.0` for documentation, `MIT` for firmware), and records the official Product Source URL (`https://github.com/itrecruitmentvananh-collab/Openwhisk3s`) required by `CERN-OHL-S-2.0` §4.3.
 
 ### Rule 2: "Complete Source" in Preferred Editable Formats + Neutral Exports (Clause 1.8)

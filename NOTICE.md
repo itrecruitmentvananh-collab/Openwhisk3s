@@ -7,7 +7,7 @@ Trần Thiên Nga, Lê Thị Vân Anh, Phạm Hoài Thương, Lê Văn Đông, V
 
 | Content | Licence | SPDX Identifier |
 | :---- | :---- | :---- |
-| **Hardware design:** `cad/`, `drawings/`, `bom/`, `electronics/` | [CERN Open Hardware Licence Version 2 – Strongly Reciprocal](LICENSE.txt) | `CERN-OHL-S-2.0` |
+| **Hardware design:** `cad/`, `drawings/`, `bom/`, `electronics/` | [CERN Open Hardware Licence Version 2 – Strongly Reciprocal](LICENSE) | `CERN-OHL-S-2.0` |
 | **Documentation & images:** `docs/`, `tests/`, `images/`, `*.md` | [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) | `CC-BY-SA-4.0` |
 | **Embedded Firmware (`ESP32-C3 SuperMini`):** `firmware/` | [MIT Licence](firmware/LICENSE) | `MIT` |
 
@@ -22,7 +22,7 @@ Off-the-shelf purchased components and their reference vendor 3D models (`130 Se
 
 ## Disclaimer
 
-Provided "as is", without warranty of any kind (see [`LICENSE.txt`](LICENSE.txt) §6). Lithium-ion cells and rotating kitchen tools can cause injury if misused; build and use at your own risk and follow [`docs/user-guide.md`](docs/user-guide.md).
+Provided "as is", without warranty of any kind (see [`LICENSE`](LICENSE) §6). Lithium-ion cells and rotating kitchen tools can cause injury if misused; build and use at your own risk and follow [`docs/user-guide.md`](docs/user-guide.md).
 
 ## How to credit
 

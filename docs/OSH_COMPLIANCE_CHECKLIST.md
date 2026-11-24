@@ -8,7 +8,7 @@
 
 | # | Requirement | Where | Status | Owner |
 |---|---|---|---|---|
-| A1 | Full, unmodified `CERN-OHL-S-2.0` text in the root | [`LICENSE.txt`](../LICENSE.txt) & [`LICENSE`](../LICENSE) | ✅ Official text included | Vân Anh |
+| A1 | Full, unmodified `CERN-OHL-S-2.0` text in the root | [`LICENSE`](../LICENSE) | ✅ Official text included | Vân Anh |
 | A2 | Licence for docs (`CC-BY-SA-4.0`) and firmware (`MIT`) stated | [`NOTICE.md`](../NOTICE.md), [`firmware/LICENSE`](../firmware/LICENSE) | ✅ Completed | Vân Anh |
 | A3 | Copyright holders + attribution instructions | [`NOTICE.md`](../NOTICE.md) | ✅ All 7 Group 1 members listed | Vân Anh |
 | A4 | Source location URL (CERN-OHL-S §4.3) | [`README.md`](../README.md), [`NOTICE.md`](../NOTICE.md) | ✅ `https://github.com/itrecruitmentvananh-collab/Openwhisk3s` | Vân Anh |

@@ -5,7 +5,7 @@
 > GPE Project 2026/27 — *Open Source Hardware for a Circular Economy* (TU Berlin × VGU), **Group 1**.
 > Status: **M3 – design-freeze candidate (v0.3, 08 Nov 2026)**. Several functions are still being validated — see [Status & known gaps](#status--known-gaps).
 
-![Concept visual](images/concept-poster-v5.png)
+![Concept visual](images/concept-poster.png)
 *Concept & architecture overview updated with the M3 CAD-aligned design (AI-assisted rendering, not a photo of a physical prototype). Additional renders are in [`images/`](images), and prototype photos will be added once fabricated.*
 
 ---
